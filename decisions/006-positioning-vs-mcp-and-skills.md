@@ -7,8 +7,8 @@ Accepted
 
 Two prevailing standards exist for extending agent harness functionality:
 
-**Agent skills** (e.g. Claude Code skills) are natural language prompt files
-that extend the agent's reasoning. They are entirely non-deterministic — the
+**Agent skills** are natural language prompt files that extend the agent's
+reasoning. They are entirely non-deterministic — the
 LLM executes everything, including what would otherwise be deterministic
 workflows. In practice, D logic ends up as inline bash commands or local
 scripts, creating local environment fragility and making D failures
