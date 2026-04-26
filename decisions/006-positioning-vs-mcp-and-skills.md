@@ -76,11 +76,3 @@ maintenance. That is a real operational burden that the alternatives avoid.
 This is the core trade-off: local execution is fragile and environment-dependent
 but cheap to run; network-hosted D logic is reliable and portable but requires
 infrastructure.
-
-## Relationship to MCP
-
-This architecture does not preclude MCP. A D-workflow API could be wrapped as
-an MCP server for runtimes that support it natively. The `contract.json` schema
-is close to MCP's `tools/list` response. If MCP clients become ubiquitous and
-MCP adds auth conventions, migrating the transport layer would not require
-changing the D-workflow API implementations or the skill prompt reasoning.
