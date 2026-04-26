@@ -18,9 +18,9 @@ indistinguishable from reasoning failures.
 via a structured protocol. This is the right instinct, but MCP has three
 significant shortcomings in practice:
 
-1. **YOLO auth**: The MCP spec defines no authentication standard. Auth is left
-   entirely to the implementer, which in practice means either no auth or
-   bespoke per-server solutions with no shared conventions.
+1. **No auth standard**: The MCP spec defines no authentication convention. Auth
+   is left entirely to the implementer, which in practice means either no auth
+   or bespoke per-server solutions with no shared conventions.
 
 2. **No nD specification**: MCP defines how the agent calls tools, not how it
    should reason about when to call them, how to interpret results, or what to
@@ -42,7 +42,7 @@ what each gets right and addresses what each gets wrong:
 | | Agent skills | MCP | This architecture |
 |---|---|---|---|
 | D/nD separation | ✗ mixed | ✓ | ✓ |
-| Auth standard | n/a | ✗ none | ✓ JWT/RS256 |
+| Auth standard | n/a | ✗ | ✓ JWT/RS256 |
 | nD specification | ✓ (whole skill) | ✗ | ✓ (skill prompt) |
 | No local D execution | ✗ | ✗ (stdio) | ✓ (network-hosted) |
 | Runtime portability | limited | client-dependent | ✓ (curl + bash) |
