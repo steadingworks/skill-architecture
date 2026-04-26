@@ -69,6 +69,14 @@ Auth is a first-class concern with a shared standard across all skills.
 - Network-hosted D logic is independently testable, deployable, and
   observable without an LLM in the loop
 
+**Meaningful shortcoming: you need to host the API.** A plain agent skill is a
+prompt file. An MCP server runs as a local process. This architecture requires
+a deployed HTTP service with a stable hostname, HTTPS, and ongoing uptime and
+maintenance. That is a real operational burden that the alternatives avoid.
+This is the core trade-off: local execution is fragile and environment-dependent
+but cheap to run; network-hosted D logic is reliable and portable but requires
+infrastructure.
+
 ## Relationship to MCP
 
 This architecture does not preclude MCP. A D-workflow API could be wrapped as
