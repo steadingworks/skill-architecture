@@ -17,10 +17,10 @@ service per request. The auth service has no knowledge of which API services
 exist. Adding a new D-workflow API requires no changes to the auth service.
 
 Secrets:
-- Private key: Docker Secret, only in `skill-auth`
-- Public key: Docker Secret, deployed to each D-workflow API
-- Master API key: Docker Secret in `skill-auth` + credential file at
-  `~/.config/homelab/skill-apis.api` on the agent host
+- Private key: injected at runtime, only accessible to `skill-auth`
+- Public key: injected at runtime into each D-workflow API
+- Master API key: injected at runtime into `skill-auth`, plus stored in a
+  credential file on the agent host
 
 Tokens: RS256, 1-hour TTL. Agent acquires a token at session start and
 re-acquires on 401.

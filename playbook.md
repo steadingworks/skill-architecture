@@ -163,72 +163,48 @@ image name. The workflow builds and pushes to GHCR on every push to `main`.
 
 ## 5. Deployment
 
-### Secrets (once per install)
+### Requirements
 
-The `skill_web_public_key` secret is created by whoever deploys `skill-auth`.
-Your API only needs that public key — no additional auth secrets.
+The D-workflow API is a stateless HTTP service. It can run anywhere that can:
 
-If your skill needs its own secrets (API keys, credentials for external
-services), create them as Docker secrets and reference them in your compose.
+- Pull a container image from GHCR
+- Serve HTTPS on a stable hostname reachable by the agent host
+- Inject secrets as files or environment variables at runtime
+- Restart the container on failure
 
-### Compose file
+This includes Docker Swarm, k3s, k8s, Fly.io, Railway, or a plain `docker run`
+behind a reverse proxy. The `compose.example.yaml` in each repo is written for
+Docker Compose/Swarm — adapt it to your platform.
 
-`compose.example.yaml` in the repo is the template. Your actual deployed
-`compose.yaml` lives on the Swarm manager (not in git) and contains real
-hostnames, certresolver names, and placement constraints.
+### Secrets
 
-Minimum for a D-workflow API service:
+Your API needs the `skill-auth` public key injected at the path configured by
+`MY_SKILL_JWT_PUBLIC_KEY_PATH`. How you deliver it depends on your platform
+(Docker Secret, k8s Secret, environment variable pointing to a mounted file,
+etc.).
 
-```yaml
-networks:
-  traefik-public:
-    external: true
+If your skill needs additional secrets (API keys, external service credentials),
+inject them the same way and read the paths from environment variables in
+`config.py`.
 
-secrets:
-  skill_web_public_key:
-    external: true
+### Environment variables
 
-services:
-  api:
-    image: ghcr.io/steadingworks/my-skill:latest
-    networks:
-      - traefik-public
-    secrets:
-      - skill_web_public_key
-    environment:
-      - MY_SKILL_JWT_PUBLIC_KEY_PATH=/run/secrets/skill_web_public_key
-      - MY_SKILL_JWT_ISSUER=<your-auth-host>
-    deploy:
-      replicas: 1
-      update_config:
-        order: start-first
-        failure_action: rollback
-      labels:
-        - traefik.enable=true
-        - traefik.http.routers.my-skill.rule=Host(`<your-api-host>`)
-        - traefik.http.routers.my-skill.entrypoints=websecure
-        - traefik.http.routers.my-skill.tls=true
-        - traefik.http.routers.my-skill.tls.certresolver=<your-certresolver>
-        - traefik.http.services.my-skill.loadbalancer.server.port=<port>
+At minimum:
+
 ```
-
-### Deploy command
-
-```bash
-docker stack deploy -c /path/to/compose.yaml my-skill
+MY_SKILL_JWT_PUBLIC_KEY_PATH=<path to public key file>
+MY_SKILL_JWT_ISSUER=<hostname of skill-auth service>
 ```
 
 ### Updates
 
 After a push to `main`, GitHub Actions builds and pushes a new image tagged
-with both `latest` and the git SHA. To pick up the new image on the Swarm:
+with both `latest` and the git SHA. Deploy the SHA-tagged image rather than
+`latest` — it guarantees your orchestrator pulls the new image rather than
+using a cached layer.
 
-```bash
-docker service update --image ghcr.io/steadingworks/my-skill:<sha> my-skill_api
-```
-
-Using the SHA tag ensures Swarm always pulls the new image rather than using a
-cached `latest`.
+See [`skill-web-fetch`](https://github.com/steadingworks/skill-web-fetch) for
+a concrete deployment example using Docker Swarm.
 
 ---
 

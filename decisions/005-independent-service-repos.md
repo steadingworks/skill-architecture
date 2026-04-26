@@ -7,13 +7,13 @@ Accepted
 
 Skills and their D-workflow APIs have independent lifecycles — they are written,
 deployed, updated, and potentially deprecated separately. A monorepo would
-couple their release cycles and create noise (CI runs for unrelated skills on
+couple their release cycles and create noise (CI builds for unrelated skills on
 every change).
 
 ## Decision
 
 Each skill is a standalone repository containing:
-- `api/` — the D-workflow API service (source, Dockerfile, requirements)
+- `api/` — the D-workflow API service (source, Dockerfile, dependencies)
 - `skill/SKILL.example.md` — skill prompt template with placeholder URLs
 - `skill/contract.json` — machine-readable interface spec
 - `compose.example.yaml` — deployment template with placeholder config
@@ -24,22 +24,21 @@ not part of any individual skill.
 
 ## What does NOT go in the repo
 
-- **Actual compose files**: deployed compose files with real hostnames,
-  certresolver names, and placement constraints live on the Swarm manager, not
-  in git. Only example files with placeholders are committed.
-- **Actual skill prompts**: installed skill prompts at
-  `~/.claude/skills/<name>/SKILL.md` contain real URLs and are never committed.
-  Only example files with placeholders are committed.
-- **Deploy scripts**: deployment is `docker stack deploy`. Shell scripts that
-  encode infrastructure knowledge (SSH targets, remote paths) belong in
-  homelab config, not in application repos.
+- **Actual deployment config**: files with real hostnames and environment-specific
+  settings live in the deployment environment, not in git. Only example files
+  with placeholders are committed.
+- **Actual skill prompts**: installed skill prompts contain real URLs and are
+  never committed. Only example files with placeholders are committed.
+- **Deploy scripts**: deployment is a standard container orchestration operation.
+  Scripts that encode environment-specific knowledge (hosts, paths, tooling)
+  belong in infrastructure config, not in application repos.
 
 ## Consequences
 
 - Each skill can be versioned, released, and deployed independently
-- GitHub Actions publishes a new image on every push to `main`, tagged with
-  both `latest` and the git SHA
-- Rolling back a skill means `docker service update --image ...<sha>`
+- CI publishes a new image on every push to `main`, tagged with both `latest`
+  and the git SHA
+- Rolling back a skill means updating the service to a previous SHA tag
 - The separation between example files (repo) and real deployed files (local)
   must be maintained — it is easy to accidentally commit real config
 
@@ -50,4 +49,4 @@ reflect the independent operational lifecycle of each skill.
 
 **Shared platform / registry**: considered for D-workflow APIs — rejected
 because it couples services that should be independent, creates a single point
-of failure, and destroys skill portability. See the architecture overview.
+of failure, and destroys skill portability.
