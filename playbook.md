@@ -172,9 +172,9 @@ The D-workflow API is a stateless HTTP service. It can run anywhere that can:
 - Inject secrets as files or environment variables at runtime
 - Restart the container on failure
 
-This includes Docker Swarm, k3s, k8s, Fly.io, Railway, or a plain `docker run`
+This includes Docker Compose, k3s, k8s, Fly.io, Railway, or a plain `docker run`
 behind a reverse proxy. The `compose.example.yaml` in each repo is written for
-Docker Compose/Swarm — adapt it to your platform.
+Docker Compose — adapt it to your platform.
 
 ### Secrets
 
@@ -204,7 +204,7 @@ with both `latest` and the git SHA. Deploy the SHA-tagged image rather than
 using a cached layer.
 
 See [`skill-web-fetch`](https://github.com/steadingworks/skill-web-fetch) for
-a concrete deployment example using Docker Swarm.
+a concrete deployment example.
 
 ---
 
