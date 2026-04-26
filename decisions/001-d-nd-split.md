@@ -21,8 +21,14 @@ endpoints to call; the agent executes them via curl through bash.
 
 - D logic is independently testable without an LLM
 - D errors surface as HTTP status codes, not as LLM hallucinations
-- Local environment fragility is eliminated — deps live in the API container
+- Local environment fragility is moved to the network boundary — deps live in the API container, not on the agent host. Network failures and upstream errors surface as HTTP status codes.
 - Skills become portable: any agent runtime with bash and curl can use them
+- The contract is the interface; the implementation is hidden. D-layer code can
+  be rewritten, optimised, or refactored without touching the skill prompt,
+  provided the contract is maintained. Backend choices are equally invisible to
+  the agent — switching from one upstream provider to another, or aggregating
+  multiple (e.g. load-balancing across search providers), requires no
+  agent-side changes
 - Adds operational overhead: D-workflow APIs must be deployed and maintained
 
 ## Alternatives considered

@@ -9,9 +9,12 @@ Define the D/nD boundary for your skill. Ask:
 - What requires judgment, context, or synthesis? → nD, goes in the skill prompt
 - What is a pure function given known inputs? → D, goes in the API
 
-If you find yourself putting conditionals, retries, or result interpretation in
-the API, it's nD — move it to the prompt. If you find yourself putting HTTP
-calls or data transformation in the prompt, it's D — move it to the API.
+If you find yourself putting result interpretation or semantic branching in the
+API, it's nD — move it to the prompt. Retries on transient errors (503,
+timeout) are D — they belong in the API as policy, not in the prompt as
+judgment. Branching on HTTP status codes is D; branching on the meaning of a
+result is nD. If you find yourself putting HTTP calls or data transformation in
+the prompt, it's D — move it to the API.
 
 ---
 

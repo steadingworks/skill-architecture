@@ -19,7 +19,7 @@ dependency. The `allowed-tools` frontmatter in skill prompts includes
 
 ## Consequences
 
-- Skills work in any agent runtime that has bash access
+- Skills work in any Agent Skills-compatible runtime (Claude Code, GitHub Copilot, Cursor, VS Code). The base SKILL.md format is portable across all of them; each runtime defines its own frontmatter extensions that are ignored by others. The D-workflow API is runtime-agnostic: it is a plain HTTP service callable from any environment.
 - curl command examples in the skill prompt serve as both documentation and
   executable instructions
 - The agent does not need a special HTTP client tool

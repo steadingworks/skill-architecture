@@ -5,9 +5,11 @@ Accepted
 
 ## Context
 
-D-workflow APIs are containerised services that may be scheduled across
-multiple nodes. Persistent state (volumes, local files) creates node affinity,
-complicates scheduling, and breaks horizontal scaling.
+D-workflow APIs are containerised services. Persistent state (volumes, local
+filesystem) creates hidden dependencies between a service and its host —
+making restarts, redeployments, and debugging harder. Stateless services have
+no such coupling: they can be stopped, replaced, or restarted without data
+migration or node affinity.
 
 ## Decision
 

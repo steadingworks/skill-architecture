@@ -22,8 +22,8 @@ Secrets:
 - Master API key: injected at runtime into `skill-auth`, plus stored in a
   credential file on the agent host
 
-Tokens: RS256, 1-hour TTL. Agent acquires a token at session start and
-re-acquires on 401.
+Tokens: RS256, 1-hour TTL. Agents acquire at session start; 401 triggers
+reacquisition.
 
 ## Consequences
 

@@ -40,7 +40,14 @@ not part of any individual skill.
   and the git SHA
 - Rolling back a skill means updating the service to a previous SHA tag
 - The separation between example files (repo) and real deployed files (local)
-  must be maintained — it is easy to accidentally commit real config
+  must be maintained. Each skill repo includes a `.gitignore` that blocks the
+  most likely accidents:
+  ```
+  skill/SKILL.md
+  compose.yaml
+  ```
+  Before pushing, verify that no files containing real hostnames, tokens, or
+  paths are staged.
 
 ## Alternatives considered
 
